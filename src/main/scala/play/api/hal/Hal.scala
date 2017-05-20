@@ -10,7 +10,7 @@ object Hal {
    * @tparam T something which can be converted to JSON
    */
   def state[T: Writes](content: T): HalResource = {
-    HalResource(HalLinks.empty, Json.toJson(content).as[JsObject], Vector.empty)
+    HalResource(new HalLinks, Json.toJson(content).as[JsObject], Vector.empty)
   }
 
   /**
@@ -31,7 +31,7 @@ object Hal {
    * @param embeds resources to be embedded
    */
   def embedded(name: String, embeds: HalResource*): HalResource = {
-    HalResource(HalLinks.empty, JsObject(Nil), Vector(name -> embeds.toVector))
+    HalResource(new HalLinks, JsObject(Nil), Vector(name -> embeds.toVector))
   }
 
   /**
@@ -51,7 +51,7 @@ object Hal {
    */
   def hal[T: Writes](content: T, links: Vector[HalLink], embedded: Vector[(String, Vector[HalResource])] = Vector.empty): HalResource = {
     HalResource(
-      HalLinks(links),
+      new HalLinks(links),
       Json.toJson(content).as[JsObject],
       embedded)
   }

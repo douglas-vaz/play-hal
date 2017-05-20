@@ -205,4 +205,17 @@ class TestHalConstruction extends FunSuite with Matchers {
            |  }
            |}""".stripMargin))
   }
+
+  test("HalLinks should be equal regardless of link order") {
+    Hal.links(
+      HalLink("self", "/orders"),
+      HalLink("ea:admin", "/admins/1")
+    ) should equal(
+      Hal.links(
+        HalLink("ea:admin", "/admins/1"),
+        HalLink("self", "/orders")
+      )
+    )
+  }
+
 }

@@ -16,18 +16,16 @@ case class HalLink(rel: String, href: String,
   def withType(mediaType: String) = this.copy(`type` = Some(mediaType))
 }
 
-object HalLinks {
-  def empty = HalLinks(Vector.empty)
-}
-
-case class HalLinks(links: Vector[HalLink]) {
+class HalLinks(val links: Vector[HalLink] = Vector.empty) {
   def ++(other: HalLinks) = {
-    HalLinks(links ++ other.links)
+    new HalLinks(this.links ++ other.links)
   }
 
   def include(other: HalLinks) = ++(other)
 
-  def ++(link: HalLink) = HalLinks(link +: this.links)
+  def ++(link: HalLink) = new HalLinks(link +: this.links)
 
   def include(link: HalLink) = ++(link)
+
+  override def equals(obj: scala.Any): Boolean = obj.asInstanceOf[HalLinks].links.map(links.contains(_)).reduce(_ && _)
 }
